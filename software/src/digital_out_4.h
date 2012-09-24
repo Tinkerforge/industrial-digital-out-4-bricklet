@@ -135,6 +135,7 @@ void set_group(uint8_t com, SetGroup *data);
 void get_group(uint8_t com, GetGroup *data);
 void get_available_for_group(uint8_t com, GetAvailableForGroup *data);
 
+uint16_t make_value(void);
 void reconfigure_group(void);
 void reconfigure_pins(void);
 void invocation(uint8_t com, uint8_t *data);

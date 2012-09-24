@@ -86,11 +86,13 @@ void reconfigure_pins(void) {
 	}
 }
 
-uint8_t make_value(void) {
-	uint8_t value = 0;
+uint16_t make_value(void) {
+	uint16_t value = 0;
 	for(uint8_t i = 0; i < NUM_PINS; i++) {
-		if(!(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask)) {
-			value |= (1 << i);
+		if(BC->pins[i] != NULL) {
+			if(!(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask)) {
+				value |= (1 << i);
+			}
 		}
 	}
 
@@ -262,8 +264,6 @@ void set_group(uint8_t com, SetGroup *data) {
 	}
 
 	reconfigure_group();
-
-	BA->printf("group: %c %c %c %c\n\r", BC->group[0], BC->group[1], BC->group[2], BC->group[3]);
 }
 
 void get_group(uint8_t com, GetGroup *data) {

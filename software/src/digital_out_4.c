@@ -25,24 +25,50 @@
 #include "bricklib/utility/mutex.h"
 #include "bricklib/utility/init.h"
 #include "bricklib/bricklet/bricklet_communication.h"
+#include "bricklib/drivers/pio/pio.h"
 #include "config.h"
-#include <pio/pio_it.h>
-#include <pio/pio.h>
 
-const ComMessage com_messages[] = {
-	{TYPE_SET_VALUE, (message_handler_func_t)set_value},
-	{TYPE_GET_VALUE, (message_handler_func_t)get_value},
-	{TYPE_SET_MONOFLOP, (message_handler_func_t)set_monoflop},
-	{TYPE_GET_MONOFLOP, (message_handler_func_t)get_monoflop},
-	{TYPE_SET_GROUP, (message_handler_func_t)set_group},
-	{TYPE_GET_GROUP, (message_handler_func_t)get_group},
-	{TYPE_GET_AVAILABLE_FOR_GROUP, (message_handler_func_t)get_available_for_group},
-};
+void invocation(const ComType com, const uint8_t *data) {
+	switch(((MessageHeader*)data)->fid) {
+		case FID_SET_VALUE: {
+			set_value(com, (SetValue*)data);
+			break;
+		}
 
-void invocation(uint8_t com, uint8_t *data) {
-	uint8_t id = ((StandardMessage*)data)->type - 1;
-	if(id < NUM_MESSAGES) {
-		BRICKLET_OFFSET(com_messages[id].reply_func)(com, data);
+		case FID_GET_VALUE: {
+			get_value(com, (GetValue*)data);
+			break;
+		}
+
+		case FID_SET_MONOFLOP: {
+			set_monoflop(com, (SetMonoflop*)data);
+			break;
+		}
+
+		case FID_GET_MONOFLOP: {
+			get_monoflop(com, (GetMonoflop*)data);
+			break;
+		}
+
+		case FID_SET_GROUP: {
+			set_group(com, (SetGroup*)data);
+			break;
+		}
+
+		case FID_GET_GROUP: {
+			get_group(com, (GetGroup*)data);
+			break;
+		}
+
+		case FID_GET_AVAILABLE_FOR_GROUP: {
+			get_available_for_group(com, (GetAvailableForGroup*)data);
+			break;
+		}
+
+		default: {
+			BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+			break;
+		}
 	}
 }
 
@@ -99,7 +125,7 @@ uint16_t make_value(void) {
 	return value;
 }
 
-bool is_group_available(char group) {
+bool is_group_available(const char group) {
 	const int8_t diff = BS->port - group;
 	return (BCO(diff)->magic_number1 == MAGIC_NUMBER_INDUSTRIAL_DIGITAL_OUT_4_1) &&
 	       (BCO(diff)->magic_number2 == MAGIC_NUMBER_INDUSTRIAL_DIGITAL_OUT_4_2);
@@ -142,7 +168,7 @@ void reconfigure_group(void) {
 	}
 }
 
-void tick(uint8_t tick_type) {
+void tick(const uint8_t tick_type) {
 	if(tick_type & TICK_TASK_TYPE_CALCULATION) {
 		if(BC->counter != 0) {
 			BC->counter--;
@@ -165,13 +191,11 @@ void tick(uint8_t tick_type) {
 
 	if(tick_type & TICK_TASK_TYPE_MESSAGE) {
 		if(BC->monoflop_callback_mask) {
-			MonoflopDone md = {
-				BS->stack_id,
-				TYPE_MONOFLOP_DONE,
-				sizeof(MonoflopDone),
-				0,
-				0
-			};
+			MonoflopDone md;
+
+			BA->com_make_default_header(&md, BS->uid, sizeof(MonoflopDone), FID_MONOFLOP_DONE);
+			md.pin_mask   = 0;
+			md.value_mask = 0;
 
 			for(uint8_t i = 0; i < NUM_PINS; i++) {
 				if (BC->monoflop_callback_mask & (1 << i)) {
@@ -192,18 +216,17 @@ void tick(uint8_t tick_type) {
 	}
 }
 
-void get_value(uint8_t com, const GetValue *data) {
+void get_value(const ComType com, const GetValue *data) {
 	GetValueReturn gvr;
 
-	gvr.stack_id      = data->stack_id;
-	gvr.type          = data->type;
-	gvr.length        = sizeof(GetValueReturn);
+	gvr.header        = data->header;
+	gvr.header.length = sizeof(GetValueReturn);
 	gvr.value_mask    = make_value();
 
 	BA->send_blocking_with_timeout(&gvr, sizeof(GetValueReturn), com);
 }
 
-void set_value(uint8_t com, const SetValue *data) {
+void set_value(const ComType com, const SetValue *data) {
 	for(uint8_t i = 0; i < NUM_PINS; i++) {
 		if(BC->pins[i] != NULL) {
 			if(data->value_mask & (1 << i)) {
@@ -214,9 +237,11 @@ void set_value(uint8_t com, const SetValue *data) {
 		}
 		BC->time_remaining[i] = 0;
 	}
+
+	BA->com_return_setter(com, data);
 }
 
-void set_monoflop(uint8_t com, SetMonoflop *data) {
+void set_monoflop(const ComType com, const SetMonoflop *data) {
 	for(uint8_t i = 0; i < NUM_PINS; i++) {
 		if((data->pin_mask & (1 << i))) {
 			if(data->value_mask & (1 << i)) {
@@ -229,19 +254,19 @@ void set_monoflop(uint8_t com, SetMonoflop *data) {
 			BC->time_remaining[i] = data->time;
 		}
 	}
+
+	BA->com_return_setter(com, data);
 }
 
-void get_monoflop(uint8_t com, GetMonoflop *data) {
+void get_monoflop(const ComType com, const GetMonoflop *data) {
 	if(data->pin >= NUM_PINS) {
-		// TODO: Error?
+		BA->com_return_error(data, com, MESSAGE_ERROR_CODE_INVALID_PARAMETER, sizeof(MessageHeader));
 		return;
 	}
 
 	GetMonoflopReturn gmr;
-
-	gmr.stack_id       = data->stack_id;
-	gmr.type           = data->type;
-	gmr.length         = sizeof(GetMonoflopReturn);
+	gmr.header         = data->header;
+	gmr.header.length  = sizeof(GetMonoflopReturn);
 	gmr.value          = (BC->pins[data->pin]->pio->PIO_PDSR & BC->pins[data->pin]->mask) ? 1 : 0;
 	gmr.time           = BC->time[data->pin];
 	gmr.time_remaining = BC->time_remaining[data->pin];
@@ -249,29 +274,31 @@ void get_monoflop(uint8_t com, GetMonoflop *data) {
 	BA->send_blocking_with_timeout(&gmr, sizeof(GetMonoflopReturn), com);
 }
 
-void set_group(uint8_t com, SetGroup *data) {
+void set_group(const ComType com, const SetGroup *data) {
 	for(uint8_t i = 0; i < 4; i++) {
-		if(data->group[i] < 'a') {
-			data->group[i] += 'a' - 'A';
+		char group = data->group[i];
+		if(group < 'a') {
+			group += 'a' - 'A';
 		}
-		if(data->group[i] >= 'a' &&
-           data->group[i] <= 'd' &&
-           is_group_available(data->group[i])) {
-			BC->group[i] = data->group[i];
+		if(group >= 'a' && group <= 'd' && is_group_available(group)) {
+			BC->group[i] = group;
 		} else {
+			BA->com_return_error(data, com, MESSAGE_ERROR_CODE_INVALID_PARAMETER, sizeof(MessageHeader));
 			BC->group[i] = 'n';
+			reconfigure_group();
+			return;
 		}
 	}
 
 	reconfigure_group();
+	BA->com_return_setter(com, data);
 }
 
-void get_group(uint8_t com, GetGroup *data) {
+void get_group(const ComType com, const GetGroup *data) {
 	GetGroupReturn ggr;
 
-	ggr.stack_id       = data->stack_id;
-	ggr.type           = data->type;
-	ggr.length         = sizeof(GetGroupReturn);
+	ggr.header         = data->header;
+	ggr.header.length  = sizeof(GetGroupReturn);
 	ggr.group[0]       = BC->group[0];
 	ggr.group[1]       = BC->group[1];
 	ggr.group[2]       = BC->group[2];
@@ -280,12 +307,11 @@ void get_group(uint8_t com, GetGroup *data) {
 	BA->send_blocking_with_timeout(&ggr, sizeof(GetGroupReturn), com);
 }
 
-void get_available_for_group(uint8_t com, GetAvailableForGroup *data) {
+void get_available_for_group(const ComType com, const GetAvailableForGroup *data) {
 	GetAvailableForGroupReturn gafgr;
 
-	gafgr.stack_id       = data->stack_id;
-	gafgr.type           = data->type;
-	gafgr.length         = sizeof(GetAvailableForGroupReturn);
+	gafgr.header         = data->header;
+	gafgr.header.length  = sizeof(GetAvailableForGroupReturn);
 	gafgr.available      = 0;
 
 	for(uint8_t i = 0; i < 4; i++) {

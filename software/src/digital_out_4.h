@@ -24,123 +24,99 @@
 
 #include <stdint.h>
 
-#define TYPE_SET_VALUE 1
-#define TYPE_GET_VALUE 2
-#define TYPE_SET_MONOFLOP 3
-#define TYPE_GET_MONOFLOP 4
-#define TYPE_SET_GROUP 5
-#define TYPE_GET_GROUP 6
-#define TYPE_GET_AVAILABLE_FOR_GROUP 7
-#define TYPE_MONOFLOP_DONE 8
+#include "bricklib/com/com_common.h"
+
+#define FID_SET_VALUE 1
+#define FID_GET_VALUE 2
+#define FID_SET_MONOFLOP 3
+#define FID_GET_MONOFLOP 4
+#define FID_SET_GROUP 5
+#define FID_GET_GROUP 6
+#define FID_GET_AVAILABLE_FOR_GROUP 7
+#define FID_MONOFLOP_DONE 8
 
 #define NUM_MESSAGES 8
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 } __attribute__((__packed__)) GetValue;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint16_t value_mask;
 } __attribute__((__packed__)) GetValueReturn;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint16_t value_mask;
 } __attribute__((__packed__)) SetValue;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint16_t pin_mask;
 	uint16_t value_mask;
 	uint32_t time;
 } __attribute__((__packed__)) SetMonoflop;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint8_t pin;
 } __attribute__((__packed__)) GetMonoflop;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint16_t value;
 	uint32_t time;
 	uint32_t time_remaining;
 } __attribute__((__packed__)) GetMonoflopReturn;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	char group[4];
 } __attribute__((__packed__)) SetGroup;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 } __attribute__((__packed__)) GetGroup;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	char group[4];
 } __attribute__((__packed__)) GetGroupReturn;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 } __attribute__((__packed__)) GetAvailableForGroup;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint8_t available;
 } __attribute__((__packed__)) GetAvailableForGroupReturn;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 	uint16_t pin_mask;
 	uint16_t value_mask;
 } __attribute__((__packed__)) MonoflopDone;
 
 typedef struct {
-	uint8_t stack_id;
-	uint8_t type;
-	uint16_t length;
+	MessageHeader header;
 } __attribute__((__packed__)) StandardMessage;
 
-void get_value(uint8_t com, const GetValue *data);
-void set_value(uint8_t com, const SetValue *data);
-void set_monoflop(uint8_t com, SetMonoflop *data);
-void get_monoflop(uint8_t com, GetMonoflop *data);
-void set_group(uint8_t com, SetGroup *data);
-void get_group(uint8_t com, GetGroup *data);
-void get_available_for_group(uint8_t com, GetAvailableForGroup *data);
+void get_value(const ComType com, const GetValue *data);
+void set_value(const ComType com, const SetValue *data);
+void set_monoflop(const ComType com, const SetMonoflop *data);
+void get_monoflop(const ComType com, const GetMonoflop *data);
+void set_group(const ComType com, const SetGroup *data);
+void get_group(const ComType com, const GetGroup *data);
+void get_available_for_group(const ComType com, const GetAvailableForGroup *data);
 
 uint16_t make_value(void);
 void reconfigure_group(void);
 void reconfigure_pins(void);
-void invocation(uint8_t com, uint8_t *data);
+void invocation(const ComType com, const uint8_t *data);
 void constructor(void);
 void destructor(void);
-void tick(uint8_t tick_type);
+void tick(const uint8_t tick_type);
 
 #endif

@@ -17,18 +17,18 @@ int main() {
 	}
 
 	// Create device object
-	IndustrialDigitalOut4 idr4;
-	industrial_digital_out_4_create(&idr4, UID); 
+	IndustrialDigitalOut4 ido4;
+	industrial_digital_out_4_create(&ido4, UID); 
 
 	// Add device to IP connection
-	if(ipcon_add_device(&ipcon, &idr4) < 0) {
+	if(ipcon_add_device(&ipcon, &ido4) < 0) {
 		fprintf(stderr, "Could not connect to Bricklet\n");
 		exit(1);
 	}
 	// Don't use device before it is added to a connection
 
 	// Turn pins 0, 3 high and pins 1, 2 low
-	industrial_digital_out_4_set_value(&idr4, 1 | 8);
+	industrial_digital_out_4_set_value(&ido4, 1 | 8);
 
 	printf("Press key to exit\n");
 	getchar();

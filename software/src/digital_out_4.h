@@ -35,8 +35,6 @@
 #define FID_GET_AVAILABLE_FOR_GROUP 7
 #define FID_MONOFLOP_DONE 8
 
-#define NUM_MESSAGES 8
-
 typedef struct {
 	MessageHeader header;
 } __attribute__((__packed__)) GetValue;

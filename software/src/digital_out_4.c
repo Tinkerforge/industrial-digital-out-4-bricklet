@@ -177,7 +177,7 @@ void tick(const uint8_t tick_type) {
 		for(uint8_t i = 0; i < NUM_PINS; i++) {
 			if(BC->time_remaining[i] != 0) {
 				BC->time_remaining[i]--;
-				if(BC->time_remaining[i] == 0) {
+				if(BC->time_remaining[i] == 0 && BC->pins[i] != NULL) {
 					if(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask) {
 						BC->pins[i]->pio->PIO_CODR = BC->pins[i]->mask;
 					} else {
@@ -198,10 +198,10 @@ void tick(const uint8_t tick_type) {
 			md.value_mask = 0;
 
 			for(uint8_t i = 0; i < NUM_PINS; i++) {
-				if (BC->monoflop_callback_mask & (1 << i)) {
+				if((BC->monoflop_callback_mask & (1 << i)) && BC->pins[i] != NULL) {
 					md.pin_mask |= (1 << i);
 
-					if(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask) {
+					if(!(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask)) {
 						md.value_mask |= (1 << i);
 					}
 				}
@@ -243,7 +243,7 @@ void set_value(const ComType com, const SetValue *data) {
 
 void set_monoflop(const ComType com, const SetMonoflop *data) {
 	for(uint8_t i = 0; i < NUM_PINS; i++) {
-		if((data->pin_mask & (1 << i))) {
+		if((data->pin_mask & (1 << i)) && BC->pins[i] != NULL) {
 			if(data->value_mask & (1 << i)) {
 				BC->pins[i]->pio->PIO_CODR = BC->pins[i]->mask;
 			} else {
@@ -259,7 +259,7 @@ void set_monoflop(const ComType com, const SetMonoflop *data) {
 }
 
 void get_monoflop(const ComType com, const GetMonoflop *data) {
-	if(data->pin >= NUM_PINS) {
+	if(data->pin >= NUM_PINS || BC->pins[data->pin] == NULL) {
 		BA->com_return_error(data, com, MESSAGE_ERROR_CODE_INVALID_PARAMETER, sizeof(MessageHeader));
 		return;
 	}
@@ -267,7 +267,7 @@ void get_monoflop(const ComType com, const GetMonoflop *data) {
 	GetMonoflopReturn gmr;
 	gmr.header         = data->header;
 	gmr.header.length  = sizeof(GetMonoflopReturn);
-	gmr.value          = (BC->pins[data->pin]->pio->PIO_PDSR & BC->pins[data->pin]->mask) ? 1 : 0;
+	gmr.value          = (BC->pins[data->pin]->pio->PIO_PDSR & BC->pins[data->pin]->mask) ? 0 : 1;
 	gmr.time           = BC->time[data->pin];
 	gmr.time_remaining = BC->time_remaining[data->pin];
 

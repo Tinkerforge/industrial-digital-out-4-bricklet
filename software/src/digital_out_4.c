@@ -260,7 +260,7 @@ void set_monoflop(const ComType com, const SetMonoflop *data) {
 
 void get_monoflop(const ComType com, const GetMonoflop *data) {
 	if(data->pin >= NUM_PINS || BC->pins[data->pin] == NULL) {
-		BA->com_return_error(data, com, MESSAGE_ERROR_CODE_INVALID_PARAMETER, sizeof(MessageHeader));
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_INVALID_PARAMETER, com);
 		return;
 	}
 
@@ -275,23 +275,28 @@ void get_monoflop(const ComType com, const GetMonoflop *data) {
 }
 
 void set_group(const ComType com, const SetGroup *data) {
+	bool error = false;
+
 	for(uint8_t i = 0; i < 4; i++) {
 		char group = data->group[i];
 		if(group < 'a') {
 			group += 'a' - 'A';
 		}
-		if(group >= 'a' && group <= 'd' && is_group_available(group)) {
+		if((group >= 'a' && group <= 'd' && is_group_available(group)) || group == 'n') {
 			BC->group[i] = group;
 		} else {
-			BA->com_return_error(data, com, MESSAGE_ERROR_CODE_INVALID_PARAMETER, sizeof(MessageHeader));
 			BC->group[i] = 'n';
-			reconfigure_group();
-			return;
+			error = true;
 		}
 	}
 
 	reconfigure_group();
-	BA->com_return_setter(com, data);
+
+	if(error) {
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_INVALID_PARAMETER, com);
+	} else {
+		BA->com_return_setter(com, data);
+	}
 }
 
 void get_group(const ComType com, const GetGroup *data) {

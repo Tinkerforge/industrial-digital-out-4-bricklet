@@ -11,11 +11,11 @@ from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_industrial_digital_out_4 import IndustrialDigitalOut4
 
 if __name__ == "__main__":
-    ipcon = IPConnection(HOST, PORT) # Create IP connection to brickd
+    ipcon = IPConnection() # Create IP connection
+    ido4 = IndustrialDigitalOut4(UID, ipcon) # Create device object
 
-    ido4 = IndustrialDigitalOut4(UID) # Create device object
-    ipcon.add_device(ido4) # Add device to IP connection
-    # Don't use device before it is added to a connection
+    ipcon.connect(HOST, PORT) # Connect to brickd
+    # Don't use device before ipcon is connected
 
     # Turn relays alternating on/off for 10 times with 100ms delay
     for i in range(10):
@@ -29,4 +29,3 @@ if __name__ == "__main__":
         ido4.set_value(1 << 3)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
-    ipcon.destroy()

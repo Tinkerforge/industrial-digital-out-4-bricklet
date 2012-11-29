@@ -25,22 +25,21 @@ var
 
 procedure TExample.Execute;
 begin
-  { Create IP connection to brickd }
-  ipcon := TIPConnection.Create(HOST, PORT);
+  { Create IP connection }
+  ipcon := TIPConnection.Create();
 
   { Create device object }
-  ido4 := TBrickletIndustrialDigitalOut4.Create(UID);
+  ido4 := TBrickletIndustrialDigitalOut4.Create(UID, ipcon);
 
-  { Add device to IP connection }
-  ipcon.AddDevice(ido4);
-  { Don't use device before it is added to a connection }
+  { Connect to brickd }
+  ipcon.Connect(HOST, PORT);
+  { Don't use device before ipcon is connected }
 
   { Turn pins 0, 3 high and pins 1, 2 low. }
   ido4.SetValue((1 shl 0) or (1 shl 3));
 
   WriteLn('Press key to exit');
   ReadLn;
-  ipcon.Destroy;
 end;
 
 begin

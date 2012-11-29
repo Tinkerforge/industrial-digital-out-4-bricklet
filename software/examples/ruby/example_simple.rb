@@ -10,10 +10,11 @@ HOST = 'localhost'
 PORT = 4223
 UID = 'xyz' # Change to your UID
 
-ipcon = IPConnection.new HOST, PORT # Create IP connection to brickd
-ido4 = BrickletIndustrialDigitalOut4.new UID # Create device object
-ipcon.add_device ido4 # Add device to IP connection
-# Don't use device before it is added to a connection
+ipcon = IPConnection.new # Create IP connection
+ido4 = BrickletIndustrialDigitalOut4.new UID, ipcon # Create device object
+
+ipcon.connect HOST, PORT # Connect to brickd
+# Don't use device before ipcon is connected
 
 # Turn pins alternating high/low for 10 times with 100 ms delay 
 for i in 0..9
@@ -29,4 +30,3 @@ end
 
 puts 'Press key to exit'
 $stdin.gets
-ipcon.destroy

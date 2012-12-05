@@ -10,11 +10,11 @@ $host = 'localhost';
 $port = 4223;
 $uid = 'xyz'; // Change to your UID
 
-$ipcon = new IPConnection($host, $port); // Create IP connection to brickd
-$ido4 = new BrickletIndustrialDigitalOut4($uid); // Create device object
+$ipcon = new IPConnection(); // Create IP connection
+$ido4 = new BrickletIndustrialDigitalOut4($uid, $ipcon); // Create device object
 
-$ipcon->addDevice($ido4); // Add device to IP connection
-// Don't use device before it is added to a connection
+$ipcon->connect($host, $port); // Connect to brickd
+// Don't use device before ipcon is connected
 
 // Turn pins alternating high/low for 10 times with 100 ms delay
 for($i = 0; $i < 10; $i++)
@@ -31,6 +31,5 @@ for($i = 0; $i < 10; $i++)
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));
-$ipcon->destroy();
 
 ?>

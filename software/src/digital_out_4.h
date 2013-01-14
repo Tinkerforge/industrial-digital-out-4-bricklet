@@ -1,5 +1,5 @@
 /* industrial-digital-out-4-bricklet
- * Copyright (C) 2012 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2012-2013 Olaf Lüke <olaf@tinkerforge.com>
  *
  * digital_out_4.h: Implementation of Industrial Digital Out 4 Bricklet messages
  *
@@ -34,6 +34,7 @@
 #define FID_GET_GROUP 6
 #define FID_GET_AVAILABLE_FOR_GROUP 7
 #define FID_MONOFLOP_DONE 8
+#define FID_SET_SELECTED_VALUES 9
 
 typedef struct {
 	MessageHeader header;
@@ -51,7 +52,7 @@ typedef struct {
 
 typedef struct {
 	MessageHeader header;
-	uint16_t pin_mask;
+	uint16_t selection_mask;
 	uint16_t value_mask;
 	uint32_t time;
 } __attribute__((__packed__)) SetMonoflop;
@@ -93,9 +94,15 @@ typedef struct {
 
 typedef struct {
 	MessageHeader header;
-	uint16_t pin_mask;
+	uint16_t selection_mask;
 	uint16_t value_mask;
 } __attribute__((__packed__)) MonoflopDone;
+
+typedef struct {
+	MessageHeader header;
+	uint16_t selection_mask;
+	uint16_t value_mask;
+} __attribute__((__packed__)) SetSelectedValues;
 
 typedef struct {
 	MessageHeader header;
@@ -108,6 +115,7 @@ void get_monoflop(const ComType com, const GetMonoflop *data);
 void set_group(const ComType com, const SetGroup *data);
 void get_group(const ComType com, const GetGroup *data);
 void get_available_for_group(const ComType com, const GetAvailableForGroup *data);
+void set_selected_values(const ComType com, const SetSelectedValues *data);
 
 uint16_t make_value(void);
 void reconfigure_group(void);

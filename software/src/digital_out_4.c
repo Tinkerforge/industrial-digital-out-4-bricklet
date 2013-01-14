@@ -1,5 +1,5 @@
 /* industrial-digital-out-4-bricklet
- * Copyright (C) 2012 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2012-2013 Olaf Lüke <olaf@tinkerforge.com>
  *
  * digital_out_4.c: Implementation of Industrial Digital Out 4 Bricklet messages
  *
@@ -62,6 +62,11 @@ void invocation(const ComType com, const uint8_t *data) {
 
 		case FID_GET_AVAILABLE_FOR_GROUP: {
 			get_available_for_group(com, (GetAvailableForGroup*)data);
+			break;
+		}
+
+		case FID_SET_SELECTED_VALUES: {
+			set_selected_values(com, (SetSelectedValues*)data);
 			break;
 		}
 
@@ -194,12 +199,12 @@ void tick(const uint8_t tick_type) {
 			MonoflopDone md;
 
 			BA->com_make_default_header(&md, BS->uid, sizeof(MonoflopDone), FID_MONOFLOP_DONE);
-			md.pin_mask   = 0;
-			md.value_mask = 0;
+			md.selection_mask = 0;
+			md.value_mask     = 0;
 
 			for(uint8_t i = 0; i < NUM_PINS; i++) {
 				if((BC->monoflop_callback_mask & (1 << i)) && BC->pins[i] != NULL) {
-					md.pin_mask |= (1 << i);
+					md.selection_mask |= (1 << i);
 
 					if(!(BC->pins[i]->pio->PIO_PDSR & BC->pins[i]->mask)) {
 						md.value_mask |= (1 << i);
@@ -243,7 +248,7 @@ void set_value(const ComType com, const SetValue *data) {
 
 void set_monoflop(const ComType com, const SetMonoflop *data) {
 	for(uint8_t i = 0; i < NUM_PINS; i++) {
-		if((data->pin_mask & (1 << i)) && BC->pins[i] != NULL) {
+		if((data->selection_mask & (1 << i)) && BC->pins[i] != NULL) {
 			if(data->value_mask & (1 << i)) {
 				BC->pins[i]->pio->PIO_CODR = BC->pins[i]->mask;
 			} else {
@@ -326,4 +331,21 @@ void get_available_for_group(const ComType com, const GetAvailableForGroup *data
 	}
 
 	BA->send_blocking_with_timeout(&gafgr, sizeof(GetAvailableForGroupReturn), com);
+}
+
+void set_selected_values(const ComType com, const SetSelectedValues *data) {
+	for(uint8_t i = 0; i < NUM_PINS; i++) {
+		if(data->selection_mask & (1 << i)) {
+			if(BC->pins[i] != NULL) {
+				if(data->value_mask & (1 << i)) {
+					BC->pins[i]->pio->PIO_CODR = BC->pins[i]->mask;
+				} else {
+					BC->pins[i]->pio->PIO_SODR = BC->pins[i]->mask;
+				}
+			}
+			BC->time_remaining[i] = 0;
+		}
+	}
+
+	BA->com_return_setter(com, data);
 }

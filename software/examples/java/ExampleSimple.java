@@ -28,5 +28,6 @@ public class ExampleSimple {
 		}
 
 		System.console().readLine("Press key to exit\n");
+		ipcon.disconnect();
 	}
 }

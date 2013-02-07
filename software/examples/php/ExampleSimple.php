@@ -31,5 +31,6 @@ for($i = 0; $i < 10; $i++)
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));
+$ipcon->disconnect();
 
 ?>

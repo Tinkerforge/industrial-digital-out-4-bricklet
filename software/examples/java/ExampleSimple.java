@@ -10,7 +10,8 @@ public class ExampleSimple {
 	//       might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletIndustrialDigitalOut4 ido4 = new BrickletIndustrialDigitalOut4(UID, ipcon); // Create device object
+		BrickletIndustrialDigitalOut4 ido4 =
+		  new BrickletIndustrialDigitalOut4(UID, ipcon); // Create device object
 
 		ipcon.connect(host, port); // Connect to brickd
 		// Don't use device before ipcon is connected

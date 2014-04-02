@@ -26,6 +26,6 @@ foreach(1 .. 10)
     $ido4->set_value(1 << 3);
 }
 
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();

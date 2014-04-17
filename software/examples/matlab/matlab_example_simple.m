@@ -24,6 +24,6 @@ function matlab_example_simple
         ido4.setValue(bitshift(1, 3));
     end
     
-    input('\nPress any key to exit...\n', 's');
+    input('Press any key to exit...\n', 's');
     ipcon.disconnect();
 end

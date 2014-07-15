@@ -28,7 +28,7 @@ public class ExampleSimple {
 			ido4.setValue(1 << 3);
 		}
 
-		System.console().readLine("Press key to exit\n");
+		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();
 	}
 }

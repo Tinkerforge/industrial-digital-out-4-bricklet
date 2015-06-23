@@ -1,4 +1,4 @@
-#!/usr/bin/perl  
+#!/usr/bin/perl
 
 use Tinkerforge::IPConnection;
 use Tinkerforge::BrickletIndustrialDigitalOut4;
@@ -16,7 +16,7 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Turn relays alternating on/off for 10 times with 1s delay
 foreach(1 .. 10)
 {
-	sleep(1);
+    sleep(1);
     $ido4->set_value(1 << 0);
     sleep(1);
     $ido4->set_value(1 << 1);

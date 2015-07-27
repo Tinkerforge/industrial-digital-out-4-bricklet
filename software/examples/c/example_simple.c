@@ -5,7 +5,7 @@
 
 #define HOST "localhost"
 #define PORT 4223
-#define UID "xyz" // Change to your UID
+#define UID "XYZ" // Change to your UID
 
 int main() {
 	// Create IP connection
@@ -14,7 +14,7 @@ int main() {
 
 	// Create device object
 	IndustrialDigitalOut4 ido4;
-	industrial_digital_out_4_create(&ido4, UID, &ipcon); 
+	industrial_digital_out_4_create(&ido4, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {

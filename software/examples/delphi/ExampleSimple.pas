@@ -24,6 +24,7 @@ var
   e: TExample;
 
 procedure TExample.Execute;
+var i: longint;
 begin
   { Create IP connection }
   ipcon := TIPConnection.Create;
@@ -35,8 +36,17 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Turn pins 0, 3 high and pins 1, 2 low. }
-  ido4.SetValue((1 shl 0) or (1 shl 3));
+  { Turn pins alternating high/low for 10 times with 100 ms delay }
+  for i := 0 to 9 do begin
+    Sleep(100);
+    ido4.SetValue(1 shl 0);
+    Sleep(100);
+    ido4.SetValue(1 shl 1);
+    Sleep(100);
+    ido4.SetValue(1 shl 2);
+    Sleep(100);
+    ido4.SetValue(1 shl 3);
+  end;
 
   WriteLn('Press key to exit');
   ReadLn;

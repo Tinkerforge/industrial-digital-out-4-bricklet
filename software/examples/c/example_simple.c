@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define IPCON_EXPOSE_MILLISLEEP
+
 #include "ip_connection.h"
 #include "bricklet_industrial_digital_out_4.h"
 
@@ -23,8 +25,18 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// Turn pins 0, 3 high and pins 1, 2 low
-	industrial_digital_out_4_set_value(&ido4, 1 | 8);
+	// Turn pins alternating high/low for 10 times with 100 ms delay
+	int i;
+	for(i = 0; i < 10; ++i) {
+		millisleep(100);
+		industrial_digital_out_4_set_value(&ido4, 1 << 0);
+		millisleep(100);
+		industrial_digital_out_4_set_value(&ido4, 1 << 1);
+		millisleep(100);
+		industrial_digital_out_4_set_value(&ido4, 1 << 2);
+		millisleep(100);
+		industrial_digital_out_4_set_value(&ido4, 1 << 3);
+	}
 
 	printf("Press key to exit\n");
 	getchar();

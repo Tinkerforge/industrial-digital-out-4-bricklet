@@ -4,5 +4,14 @@
 # change to your UID
 uid=XYZ
 
-# turn pins 0, 3 high and pins 1, 2 low: (1 << 0) | (1 << 3) = 9
-tinkerforge call industrial-digital-out-4-bricklet $uid set-value 9
+# Turn pins alternating high/low for 10 times with 100 ms delay
+for i in 0 1 2 3 4 5 6 7 8 9; do
+	sleep 0.1
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 1
+	sleep 0.1
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 2
+	sleep 0.1
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 4
+	sleep 0.1
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 8
+done

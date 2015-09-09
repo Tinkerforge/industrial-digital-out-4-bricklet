@@ -17,7 +17,7 @@ ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
 # Turn pins alternating high/low for 10 times with 100 ms delay 
-for i in 0..9
+for _ in 0..9
   sleep 0.1
   ido4.set_value 1 << 0
   sleep 0.1

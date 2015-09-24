@@ -1,17 +1,16 @@
 #!/bin/sh
-# connects to localhost:4223 by default, use --host and --port to change it
+# Connects to localhost:4223 by default, use --host and --port to change this
 
-# change to your UID
-uid=XYZ
+uid=XYZ # Change to your UID
 
-# Turn pins alternating high/low for 10 times with 100 ms delay
+# Turn pins alternating high/low 10 times with 100ms delay
 for i in 0 1 2 3 4 5 6 7 8 9; do
 	sleep 0.1
-	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 1
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 1 # 1 << 0 = 1
 	sleep 0.1
-	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 2
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 2 # 1 << 1 = 2
 	sleep 0.1
-	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 4
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 4 # 1 << 2 = 4
 	sleep 0.1
-	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 8
+	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 8 # 1 << 3 = 8
 done

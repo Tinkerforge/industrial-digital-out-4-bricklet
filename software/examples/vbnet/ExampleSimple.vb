@@ -1,3 +1,5 @@
+Imports System
+Imports System.Threading
 Imports Tinkerforge
 
 Module ExampleSimple
@@ -12,22 +14,21 @@ Module ExampleSimple
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Turn pins alternating high/low for 10 times with 100 ms delay
+        ' Turn pins alternating high/low 10 times with 100ms delay
         Dim i As Integer
-
-        For i = 1 To 10
-            System.Threading.Thread.Sleep(100)
+        For i = 0 To 9
+            Thread.Sleep(100)
             ido4.SetValue(1 << 0)
-            System.Threading.Thread.Sleep(100)
+            Thread.Sleep(100)
             ido4.SetValue(1 << 1)
-            System.Threading.Thread.Sleep(100)
+            Thread.Sleep(100)
             ido4.SetValue(1 << 2)
-            System.Threading.Thread.Sleep(100)
+            Thread.Sleep(100)
             ido4.SetValue(1 << 3)
         Next i
 
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

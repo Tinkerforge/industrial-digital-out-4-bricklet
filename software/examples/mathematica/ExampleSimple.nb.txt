@@ -3,14 +3,14 @@ LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
 
 host="localhost"
 port=4223
-uid="cmN"(* Change to your UID *)
+uid="XYZ"(*Change to your UID*)
 
-(* Create IPConnection and device object *)
+(*Create IPConnection and device object*)
 ipcon=NETNew["Tinkerforge.IPConnection"]
 ido4=NETNew["Tinkerforge.BrickletIndustrialDigitalOut4",uid,ipcon]
 ipcon@Connect[host,port]
 
-(* Turn pins alternating high/low for 10 times with 100 ms delay *)
+(*Turn pins alternating high/low 10 times with 100ms delay*)
 For[i=0,i<10,i++,
  Pause[0.1];
  ido4@SetValue[FromDigits[{0,0,0,1},2]];
@@ -19,10 +19,10 @@ For[i=0,i<10,i++,
  Pause[0.1];
  ido4@SetValue[FromDigits[{0,1,0,0},2]];
  Pause[0.1];
- ido4@SetValue[FromDigits[{1,0,0,0},2]];
+ ido4@SetValue[FromDigits[{1,0,0,0},2]]
 ]
 
-(* Clean up *)
+(*Clean up*)
 ipcon@Disconnect[]
 ReleaseNETObject[ido4]
 ReleaseNETObject[ipcon]

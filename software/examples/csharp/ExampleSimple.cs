@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Tinkerforge;
 
 class Example
@@ -15,21 +17,21 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Turn pins alternating high/low for 10 times with 100 ms delay
+		// Turn pins alternating high/low 10 times with 100ms delay
 		for(int i = 0; i < 10; i++)
 		{
-			System.Threading.Thread.Sleep(100);
+			Thread.Sleep(100);
 			ido4.SetValue(1 << 0);
-			System.Threading.Thread.Sleep(100);
+			Thread.Sleep(100);
 			ido4.SetValue(1 << 1);
-			System.Threading.Thread.Sleep(100);
+			Thread.Sleep(100);
 			ido4.SetValue(1 << 2);
-			System.Threading.Thread.Sleep(100);
+			Thread.Sleep(100);
 			ido4.SetValue(1 << 3);
 		}
 
-		System.Console.WriteLine("Press enter to exit");
-		System.Console.ReadLine();
+		Console.WriteLine("Press enter to exit");
+		Console.ReadLine();
 		ipcon.Disconnect();
 	}
 }

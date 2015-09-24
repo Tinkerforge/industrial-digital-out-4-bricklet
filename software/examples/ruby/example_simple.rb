@@ -16,7 +16,7 @@ ido4 = BrickletIndustrialDigitalOut4.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Turn pins alternating high/low for 10 times with 100 ms delay 
+# Turn pins alternating high/low 10 times with 100ms delay
 for _ in 0..9
   sleep 0.1
   ido4.set_value 1 << 0

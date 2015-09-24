@@ -13,7 +13,7 @@ my $ido4 = Tinkerforge::BrickletIndustrialDigitalOut4->new(&UID, $ipcon); # Crea
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Turn pins alternating high/low for 10 times with 100 ms delay
+# Turn pins alternating high/low 10 times with 100ms delay
 for (my $i = 0; $i < 10; $i++)
 {
     select(undef, undef, undef, 0.1);
@@ -26,6 +26,6 @@ for (my $i = 0; $i < 10; $i++)
     $ido4->set_value(1 << 3);
 }
 
-print "Press any key to exit...\n";
+print "Press key to exit\n";
 <STDIN>;
 $ipcon->disconnect();

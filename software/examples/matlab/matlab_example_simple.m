@@ -4,16 +4,16 @@ function matlab_example_simple()
 
     HOST = 'localhost';
     PORT = 4223;
-    UID = 'fJZ'; % Change to your UID
-    
+    UID = 'XYZ'; % Change to your UID
+
     ipcon = IPConnection(); % Create IP connection
     ido4 = BrickletIndustrialDigitalOut4(UID, ipcon); % Create device object
 
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
-    % Turn pins alternating high/low for 10 times with 100 ms delay
-    for i = 1:10
+    % Turn pins alternating high/low 10 times with 100ms delay
+    for i = 0:9
         pause(0.1);
         ido4.setValue(bitshift(1, 0));
         pause(0.1);
@@ -23,7 +23,6 @@ function matlab_example_simple()
         pause(0.1);
         ido4.setValue(bitshift(1, 3));
     end
-    
-    input('Press any key to exit...\n', 's');
+    input('Press key to exit\n', 's');
     ipcon.disconnect();
 end

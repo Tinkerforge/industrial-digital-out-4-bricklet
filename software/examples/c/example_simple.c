@@ -25,7 +25,7 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// Turn pins alternating high/low for 10 times with 100 ms delay
+	// Turn pins alternating high/low 10 times with 100ms delay
 	int i;
 	for(i = 0; i < 10; ++i) {
 		millisleep(100);

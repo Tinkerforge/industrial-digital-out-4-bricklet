@@ -40,6 +40,7 @@ int main(void) {
 
 	printf("Press key to exit\n");
 	getchar();
+	industrial_digital_out_4_destroy(&ido4);
 	ipcon_destroy(&ipcon); // Calls ipcon_disconnect internally
 	return 0;
 }

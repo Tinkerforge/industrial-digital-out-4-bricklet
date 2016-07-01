@@ -5,7 +5,7 @@ use Tinkerforge::BrickletIndustrialDigitalOut4;
 
 use constant HOST => 'localhost';
 use constant PORT => 4223;
-use constant UID => 'XYZ'; # Change to your UID
+use constant UID => 'XYZ'; # Change XYZ to the UID of your Industrial Digital Out 4 Bricklet
 
 my $ipcon = Tinkerforge::IPConnection->new(); # Create IP connection
 my $ido4 = Tinkerforge::BrickletIndustrialDigitalOut4->new(&UID, $ipcon); # Create device object

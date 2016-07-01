@@ -4,7 +4,9 @@ import com.tinkerforge.BrickletIndustrialDigitalOut4;
 public class ExampleSimple {
 	private static final String HOST = "localhost";
 	private static final int PORT = 4223;
-	private static final String UID = "XYZ"; // Change to your UID
+
+	// Change XYZ to the UID of your Industrial Digital Out 4 Bricklet
+	private static final String UID = "XYZ";
 
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions
 	//       you might normally want to catch are described in the documentation

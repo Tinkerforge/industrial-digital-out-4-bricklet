@@ -1,7 +1,7 @@
 #!/bin/sh
 # Connects to localhost:4223 by default, use --host and --port to change this
 
-uid=XYZ # Change to your UID
+uid=XYZ # Change XYZ to the UID of your Industrial Digital Out 4 Bricklet
 
 # Turn pins alternating high/low 10 times with 100ms delay
 for i in 0 1 2 3 4 5 6 7 8 9; do

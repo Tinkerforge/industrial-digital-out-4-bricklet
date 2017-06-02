@@ -5,8 +5,8 @@ function octave_example_simple()
     PORT = 4223;
     UID = "XYZ"; % Change XYZ to the UID of your Industrial Digital Out 4 Bricklet
 
-    ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
-    ido4 = java_new("com.tinkerforge.BrickletIndustrialDigitalOut4", UID, ipcon); % Create device object
+    ipcon = javaObject("com.tinkerforge.IPConnection"); % Create IP connection
+    ido4 = javaObject("com.tinkerforge.BrickletIndustrialDigitalOut4", UID, ipcon); % Create device object
 
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected

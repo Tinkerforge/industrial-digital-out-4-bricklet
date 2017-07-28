@@ -1,4 +1,4 @@
-update=Do 04 Aug 2016 11:24:23 CEST
+update=Fr 17 Mär 2017 14:13:04 CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -48,7 +48,7 @@ LibName13=standard
 LibName14=tinkerforge
 [eeschema]
 version=1
-LibDir=../../analog-in-v2-bricklet/hardware/kicad-libraries.pretty
+LibDir=kicad-libraries
 [eeschema/libraries]
 LibName1=tinkerforge
 LibName2=power

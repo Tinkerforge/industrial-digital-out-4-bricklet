@@ -36,7 +36,7 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Turn pins alternating high/low 10 times with 100ms delay }
+  { Set pins alternating high/low 10 times with 100ms delay }
   for i := 0 to 9 do begin
     Sleep(100);
     ido4.SetValue(1 shl 0);

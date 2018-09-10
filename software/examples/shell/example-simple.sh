@@ -3,7 +3,7 @@
 
 uid=XYZ # Change XYZ to the UID of your Industrial Digital Out 4 Bricklet
 
-# Turn pins alternating high/low 10 times with 100ms delay
+# Set pins alternating high/low 10 times with 100ms delay
 for i in 0 1 2 3 4 5 6 7 8 9; do
 	sleep 0.1
 	tinkerforge call industrial-digital-out-4-bricklet $uid set-value 1 # 1 << 0 = 1

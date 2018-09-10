@@ -17,7 +17,7 @@ if __name__ == "__main__":
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
-    # Turn pins alternating high/low 10 times with 100ms delay
+    # Set pins alternating high/low 10 times with 100ms delay
     for i in range(10):
         time.sleep(0.1)
         ido4.set_value(1 << 0)

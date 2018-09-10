@@ -16,7 +16,7 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function (connectReason) {
-        // Turn pins alternating high/low 10 times with 100ms delay
+        // Set pins alternating high/low 10 times with 100ms delay
         for(var i = 0; i < 10; ++i) {
             setTimeout(function () {
                 ido4.setValue(1 << 0);

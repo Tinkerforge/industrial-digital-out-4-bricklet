@@ -18,7 +18,7 @@ Notebook[{
    RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Turn pins alternating high/low 10 times with 100ms delay", "*)"}],
+   RowBox[{"(*", "Set pins alternating high/low 10 times with 100ms delay", "*)"}],
    RowBox[{"For", "[", RowBox[{RowBox[{"i", "=", "0"}], ",", RowBox[{"i", "<", "10"}], ",", RowBox[{"i", "++"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Pause", "[", "0.1", "]"}], ";", "\[IndentingNewLine]", "ido4", "@", RowBox[{"SetValue", "[", RowBox[{"FromDigits", "[", RowBox[{RowBox[{"{", RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}], ",", "2"}], "]"}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Pause", "[", "0.1", "]"}], ";", "\[IndentingNewLine]", "ido4", "@", RowBox[{"SetValue", "[", RowBox[{"FromDigits", "[", RowBox[{RowBox[{"{", RowBox[{"0", ",", "0", ",", "1", ",", "0"}], "}"}], ",", "2"}], "]"}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Pause", "[", "0.1", "]"}], ";", "\[IndentingNewLine]", "ido4", "@", RowBox[{"SetValue", "[", RowBox[{"FromDigits", "[", RowBox[{RowBox[{"{", RowBox[{"0", ",", "1", ",", "0", ",", "0"}], "}"}], ",", "2"}], "]"}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Pause", "[", "0.1", "]"}], ";", "\[IndentingNewLine]", "ido4", "@", RowBox[{"SetValue", "[", RowBox[{"FromDigits", "[", RowBox[{RowBox[{"{", RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}], ",", "2"}], "]"}], "]"}], "\[IndentingNewLine]"}]}], "]"}],
    RowBox[{"
 "}],

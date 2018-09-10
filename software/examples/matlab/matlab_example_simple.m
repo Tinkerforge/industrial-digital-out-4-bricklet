@@ -12,7 +12,7 @@ function matlab_example_simple()
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
-    % Turn pins alternating high/low 10 times with 100ms delay
+    % Set pins alternating high/low 10 times with 100ms delay
     for i = 0:9
         pause(0.1);
         ido4.setValue(bitshift(1, 0));

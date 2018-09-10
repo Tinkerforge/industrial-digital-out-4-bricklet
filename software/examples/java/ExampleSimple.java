@@ -18,7 +18,7 @@ public class ExampleSimple {
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Turn pins alternating high/low 10 times with 100ms delay
+		// Set pins alternating high/low 10 times with 100ms delay
 		for(int i = 0; i < 10; i++) {
 			Thread.sleep(100);
 			ido4.setValue(1 << 0);

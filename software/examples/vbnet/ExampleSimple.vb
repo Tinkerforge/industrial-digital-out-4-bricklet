@@ -14,7 +14,7 @@ Module ExampleSimple
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Turn pins alternating high/low 10 times with 100ms delay
+        ' Set pins alternating high/low 10 times with 100ms delay
         Dim i As Integer
         For i = 0 To 9
             Thread.Sleep(100)

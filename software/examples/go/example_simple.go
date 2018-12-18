@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/tinkerforge/go-api-bindings/industrial_digital_out_4_bricklet"
+	"github.com/tinkerforge/go-api-bindings/ipconnection"
 	"time"
-	"tinkerforge/industrial_digital_out_4_bricklet"
-	"tinkerforge/ipconnection"
 )
 
 const ADDR string = "localhost:4223"

@@ -1,9 +1,5 @@
-use std::{io, error::Error};
-use std::thread;
-use std::time::Duration;
-use tinkerforge::{ip_connection::IpConnection, 
-                  industrial_digital_out_4_bricklet::*};
-
+use std::{error::Error, io, thread, time::Duration};
+use tinkerforge::{industrial_digital_out_4_bricklet::*, ip_connection::IpConnection};
 
 const HOST: &str = "localhost";
 const PORT: u16 = 4223;
@@ -14,19 +10,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     let ido4 = IndustrialDigitalOut4Bricklet::new(UID, &ipcon); // Create device object.
 
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
-    // Don't use device before ipcon is connected.
+                                          // Don't use device before ipcon is connected.
 
-		// Set pins alternating high/low 10 times with 100ms delay
-		for i in 0..10{
-			thread::sleep(Duration::from_millis(100));
-			ido4.set_value(1 << 0);
-			thread::sleep(Duration::from_millis(100));
-			ido4.set_value(1 << 1);
-			thread::sleep(Duration::from_millis(100));
-			ido4.set_value(1 << 2);
-			thread::sleep(Duration::from_millis(100));
-			ido4.set_value(1 << 3);
-		}
+    // Set pins alternating high/low 10 times with 100ms delay
+    for i in 0..10 {
+        thread::sleep(Duration::from_millis(100));
+        ido4.set_value(1 << 0);
+        thread::sleep(Duration::from_millis(100));
+        ido4.set_value(1 << 1);
+        thread::sleep(Duration::from_millis(100));
+        ido4.set_value(1 << 2);
+        thread::sleep(Duration::from_millis(100));
+        ido4.set_value(1 << 3);
+    }
 
     println!("Press enter to exit.");
     let mut _input = String::new();

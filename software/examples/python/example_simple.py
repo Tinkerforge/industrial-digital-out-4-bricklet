@@ -28,5 +28,5 @@ if __name__ == "__main__":
         time.sleep(0.1)
         ido4.set_value(1 << 3)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()

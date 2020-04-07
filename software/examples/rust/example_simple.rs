@@ -15,13 +15,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Set pins alternating high/low 10 times with 100ms delay
     for _i in 0..10 {
         thread::sleep(Duration::from_millis(100));
-        ido4.set_value(1 << 0);
+        ido4.set_value(1 << 0).recv()?;
         thread::sleep(Duration::from_millis(100));
-        ido4.set_value(1 << 1);
+        ido4.set_value(1 << 1).recv()?;
         thread::sleep(Duration::from_millis(100));
-        ido4.set_value(1 << 2);
+        ido4.set_value(1 << 2).recv()?;
         thread::sleep(Duration::from_millis(100));
-        ido4.set_value(1 << 3);
+        ido4.set_value(1 << 3).recv()?;
     }
 
     println!("Press enter to exit.");
